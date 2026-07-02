@@ -1,24 +1,15 @@
 class Solution {
     public int[] nextGreaterElements(int[] nums) {
-        int[] nge = new int[nums.length];
-        for(int i=0; i<nums.length; i++){
-            boolean found = false;
-                nge[i] = -1;
-            for(int j=i+1; j<nums.length; j++){
-                if(nums[i]<nums[j]){
-                    nge[i] = nums[j];
-                    found = true;
+        int n = nums.length;
+        int[] nge = new int[n];
+        for(int i=0; i<n; i++){
+            nge[i]= -1;
+            for(int j=i+1; j<i+n; j++){
+                int ind = j%n;
+                if(nums[ind]> nums[i]){
+                    nge[i] = nums[ind];
                     break;
                 }
-            }
-            if(!found){
-
-            for(int j=0; j<i; j++){
-                if(nums[i]<nums[j]){
-                    nge[i] = nums[j];
-                    break;
-                }
-            }
             }
         }
         return nge;
