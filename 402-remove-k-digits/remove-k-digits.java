@@ -1,39 +1,29 @@
 import java.util.*;
-
 class Solution {
     public String removeKdigits(String num, int k) {
         Stack<Character> st = new Stack<>();
-
-        for (char c : num.toCharArray()) {
-            while (!st.isEmpty() && k > 0 && st.peek() > c) {
+        for (char ch : num.toCharArray()) {
+            while (!st.isEmpty() && k > 0 && st.peek() > ch) {
                 st.pop();
                 k--;
             }
-            st.push(c);
+            st.push(ch);
         }
-
-        // if k still left → remove from end
+        // Agar abhi bhi k bacha hai to end se remove karo
         while (k > 0) {
             st.pop();
             k--;
         }
-
-        // build result
+        // Stack -> String
         StringBuilder sb = new StringBuilder();
         while (!st.isEmpty()) {
             sb.append(st.pop());
         }
-
         sb.reverse();
-
-        // remove leading zeros
-        int i = 0;
-        while (i < sb.length() && sb.charAt(i) == '0') {
-            i++;
+        // Leading zeros remove karo
+        while (sb.length() > 0 && sb.charAt(0) == '0') {
+            sb.deleteCharAt(0);
         }
-
-        String res = sb.substring(i);
-
-        return res.isEmpty() ? "0" : res;
+        return sb.length() == 0 ? "0" : sb.toString();
     }
 }
