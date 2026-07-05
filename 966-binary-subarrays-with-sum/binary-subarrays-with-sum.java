@@ -1,15 +1,21 @@
 class Solution {
-    public int numSubarraysWithSum(int[] nums, int goal) {
-        int count=0;
+    public int numSubarraysWithSum(int[] nums, int goal) {  
+        return subarrayWithSumLessThanOrEqualToGoal(nums, goal) - subarrayWithSumLessThanOrEqualToGoal(nums, goal-1); 
+    }
+
+    public static int subarrayWithSumLessThanOrEqualToGoal(int[]nums, int goal){
         int n = nums.length;
-        for(int i=0; i<n; i++){
-            int sum =0;
-            for(int j=i; j<n; j++){
-                if(sum>goal) break;
-                sum += nums[j];
-                if(sum==goal) count++;
+        int l=0, r=0, sum=0, count=0;
+        if(goal<0) return 0;
+        while(r<n){
+            sum+=nums[r];
+            while(sum>goal){
+                sum = sum - nums[l];
+                l++;
             }
+            count = count + (r-l+1);
+            r++;
         }
-        return count;   
+        return count;
     }
 }
