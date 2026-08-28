@@ -3,23 +3,15 @@ class Solution {
 
         int n = grid.length;
 
+        // Start or destination is blocked
         if (grid[0][0] == 1 || grid[n - 1][n - 1] == 1) {
             return -1;
         }
 
-        int[][] dist = new int[n][n];
+        Queue<int[]> q = new LinkedList<>();
 
-        for (int[] row : dist) {
-            Arrays.fill(row, Integer.MAX_VALUE);
-        }
-
-        // {distance, row, col}
-        PriorityQueue<int[]> pq = new PriorityQueue<>(
-            (a, b) -> Integer.compare(a[0], b[0])
-        );
-
-        dist[0][0] = 1;
-        pq.offer(new int[]{1, 0, 0});
+        q.add(new int[]{0, 0, 1});
+        grid[0][0] = 1; // mark visited
 
         int[][] dir = {
             {-1, -1}, {-1, 0}, {-1, 1},
@@ -27,39 +19,30 @@ class Solution {
             {1, -1},  {1, 0},  {1, 1}
         };
 
-        while (!pq.isEmpty()) {
+        while (!q.isEmpty()) {
 
-            int[] curr = pq.poll();
+            int[] curr = q.poll();
 
-            int d = curr[0];
-            int r = curr[1];
-            int c = curr[2];
+            int row = curr[0];
+            int col = curr[1];
+            int dist = curr[2];
 
-            // Ignore outdated entry
-            if (d != dist[r][c]) {
-                continue;
+            // Reached destination
+            if (row == n - 1 && col == n - 1) {
+                return dist;
             }
 
-            // Destination reached
-            if (r == n - 1 && c == n - 1) {
-                return d;
-            }
+            for (int[] d : dir) {
 
-            for (int[] direction : dir) {
-
-                int nr = r + direction[0];
-                int nc = c + direction[1];
+                int nr = row + d[0];
+                int nc = col + d[1];
 
                 if (nr >= 0 && nr < n &&
                     nc >= 0 && nc < n &&
                     grid[nr][nc] == 0) {
 
-                    int newDist = d + 1;
-
-                    if (newDist < dist[nr][nc]) {
-                        dist[nr][nc] = newDist;
-                        pq.offer(new int[]{newDist, nr, nc});
-                    }
+                    grid[nr][nc] = 1; // visited
+                    q.add(new int[]{nr, nc, dist + 1});
                 }
             }
         }
